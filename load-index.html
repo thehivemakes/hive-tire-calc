@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Load Index & Speed Rating — TireCalc</title>
+<meta name="description" content="Tire load index and speed rating lookup. Enter sidewall codes to find weight capacity and max speed. Free tool.">
+<meta property="og:title" content="Load Index & Speed Rating — TireCalc">
+<meta property="og:description" content="Tire load index and speed rating lookup. Enter sidewall codes to find weight capacity and max speed. Free tool.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://thehivemakes.github.io/hive-tire-calc/load-index.html">
+<link rel="stylesheet" href="style.css">
+<script src="js/calc-core.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Load Index & Speed Rating",
+  "url": "https://thehivemakes.github.io/hive-tire-calc/load-index.html",
+  "description": "Tire load index and speed rating lookup. Enter sidewall codes to find weight capacity and max speed. Free tool.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+</head>
+<body>
+<header><div class="header-inner"><div class="logo">Tire<span>Calc</span></div><div class="tagline">Free tire calculators</div></div></header>
+<nav><div class="nav-inner"><a href="index.html">TireCalc</a><span class="sep">/</span><span>Load Index & Speed Rating</span></div></nav>
+<main>
+  <div class="ad-leaderboard" id="ad-top">Ad</div>
+  <div class="card">
+    <h1>Load Index & Speed Rating</h1>
+    <p class="subtitle">Enter load index number and speed letter to find ratings.</p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="load_idx">Load index number</label>
+        <input type="number" id="load_idx" min="60" max="130" step="1" placeholder="91">
+      </div>
+      <div class="field">
+        <label for="speed_letter">Speed rating letter</label>
+        <select id="speed_letter"><option value="S">S (112 mph)</option><option value="T">T (118 mph)</option><option value="H">H (130 mph)</option><option value="V">V (149 mph)</option><option value="W">W (168 mph)</option><option value="Y">Y (186 mph)</option><option value="Z">Z (149+ mph)</option></select>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+    <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+    <div class="result" id="result">
+      <div class="result-row">
+        <span class="result-label">Load capacity per tire</span>
+        <span class="result-value" id="li-lbs">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Total capacity (4 tires)</span>
+        <span class="result-value" id="li-total">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Maximum rated speed</span>
+        <span class="result-value" id="li-speed">—</span>
+      </div>
+      <div class="result-note">Load index is a lookup table — it is NOT the weight in pounds. Always match or exceed your vehicle's required load index and speed rating. Never downgrade.</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:16px;font-weight:700;margin-bottom:12px;">Common Load Index Values</h2>
+    <table class="ref-table" id="ref-table">
+      <thead><tr><th>Index</th><th>Load (lbs)</th><th>Index</th><th>Load (lbs)</th></tr></thead>
+      <tbody>
+        <tr><td>85</td><td>1135</td><td>95</td><td>1521</td></tr>
+        <tr><td>87</td><td>1201</td><td>97</td><td>1609</td></tr>
+        <tr><td>89</td><td>1279</td><td>99</td><td>1709</td></tr>
+        <tr><td>91</td><td>1356</td><td>101</td><td>1819</td></tr>
+        <tr><td>93</td><td>1433</td><td>103</td><td>1929</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ad-rectangle" id="ad-mid">Ad</div>
+  <div class="seo-section">
+    <h2>Tire Load Index and Speed Rating Explained</h2>
+    <p>The load index is a number on the tire sidewall that corresponds to a maximum weight capacity per tire. It is NOT the weight itself — you must look it up in a table.</p>
+    <p>The speed rating is a letter that indicates the maximum sustained speed the tire is designed for. Always match or exceed your vehicle manufacturer's recommended load index and speed rating.</p>
+  </div>
+</main>
+<footer>Free tire calculators. No signup, no tracking. Always verify fitment with a tire professional before purchasing.<br>Built by <a href="https://thehivemakes.github.io/" style="color:var(--accent)">The Hive</a></footer>
+<script>
+
+const LOAD_TABLE = {60:250,61:257,62:265,63:272,64:280,65:290,66:300,67:307,68:315,69:325,70:335,71:345,72:355,73:365,74:375,75:387,76:398,77:412,78:425,79:437,80:450,81:462,82:475,83:487,84:500,85:515,86:530,87:545,88:560,89:580,90:600,91:615,92:630,93:650,94:670,95:690,96:710,97:730,98:750,99:775,100:800,101:825,102:850,103:875,104:900,105:925,106:950,107:975,108:1000,109:1030,110:1060,111:1090,112:1120,113:1150,114:1180,115:1215,116:1250,117:1285,118:1320,119:1360,120:1400};
+const SPEED_TABLE = {S:112,T:118,H:130,V:149,W:168,Y:186,Z:149};
+function calculate() {
+  const li = CalcCore.get('load_idx');
+  const sr = CalcCore.getSelect('speed_letter');
+  if (isNaN(li)) return;
+  const lbs = LOAD_TABLE[Math.round(li)];
+  const speed = SPEED_TABLE[sr];
+  CalcCore.set('li-lbs', lbs ? CalcCore.fmtInt(lbs) + ' lbs (' + CalcCore.fmtInt(lbs*0.4536) + ' kg)' : 'Index not in table');
+  CalcCore.set('li-total', lbs ? CalcCore.fmtInt(lbs*4) + ' lbs total (4 tires)' : '\u2014');
+  CalcCore.set('li-speed', speed ? speed + ' mph' : '\u2014');
+  CalcCore.showResult();
+  CalcCore.saveParams(['load_idx','speed_letter']);
+}
+
+function clearAll() {
+  ["load_idx", "speed_letter"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = el.defaultValue || '';
+  });
+  document.getElementById('result').classList.remove('visible');
+  history.replaceState(null, '', window.location.pathname);
+}
+
+document.addEventListener('DOMContentLoaded', () => { if (window.location.search) calculate(); });
+</script>
+</body>
+</html>

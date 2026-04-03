@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tire Size Comparison — TireCalc</title>
+<meta name="description" content="Tire size comparison calculator. Compare diameter, width, sidewall height, and speedometer difference between two tire sizes. Free tool.">
+<meta property="og:title" content="Tire Size Comparison — TireCalc">
+<meta property="og:description" content="Tire size comparison calculator. Compare diameter, width, sidewall height, and speedometer difference between two tire sizes. Free tool.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://thehivemakes.github.io/hive-tire-calc/tire-size.html">
+<link rel="stylesheet" href="style.css">
+<script src="js/calc-core.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Tire Size Comparison",
+  "url": "https://thehivemakes.github.io/hive-tire-calc/tire-size.html",
+  "description": "Tire size comparison calculator. Compare diameter, width, sidewall height, and speedometer difference between two tire sizes. Free tool.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+</head>
+<body>
+<header><div class="header-inner"><div class="logo">Tire<span>Calc</span></div><div class="tagline">Free tire calculators</div></div></header>
+<nav><div class="nav-inner"><a href="index.html">TireCalc</a><span class="sep">/</span><span>Tire Size Comparison</span></div></nav>
+<main>
+  <div class="ad-leaderboard" id="ad-top">Ad</div>
+  <div class="card">
+    <h1>Tire Size Comparison</h1>
+    <p class="subtitle">Enter two tire sizes to see how they compare in diameter, circumference, and speedometer impact.</p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="w1">Tire 1: Width (mm)</label>
+        <input type="number" id="w1" step="5" placeholder="225">
+      </div>
+      <div class="field">
+        <label for="a1">Tire 1: Aspect ratio</label>
+        <input type="number" id="a1" step="5" placeholder="45">
+      </div>
+      <div class="field">
+        <label for="r1">Tire 1: Rim diameter (in)</label>
+        <input type="number" id="r1" step="1" placeholder="17">
+      </div>
+      <div class="field">
+        <label for="w2">Tire 2: Width (mm)</label>
+        <input type="number" id="w2" step="5" placeholder="235">
+      </div>
+      <div class="field">
+        <label for="a2">Tire 2: Aspect ratio</label>
+        <input type="number" id="a2" step="5" placeholder="40">
+      </div>
+      <div class="field">
+        <label for="r2">Tire 2: Rim diameter (in)</label>
+        <input type="number" id="r2" step="1" placeholder="18">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+    <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+    <div class="result" id="result">
+      <div class="result-row">
+        <span class="result-label">Tire 1 diameter</span>
+        <span class="result-value" id="ts-dia1">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Tire 2 diameter</span>
+        <span class="result-value" id="ts-dia2">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Diameter difference</span>
+        <span class="result-value" id="ts-diff">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Speedometer error (Tire 2 vs 1)</span>
+        <span class="result-value" id="ts-speedo">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Revolutions per mile</span>
+        <span class="result-value" id="ts-revs">—</span>
+      </div>
+      <div class="result-note">Tire diameter = (2 × width × aspect/100 / 25.4) + rim diameter. Speedometer reads based on original tire revolutions. Larger tires make the speedometer read slower than actual speed.</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:16px;font-weight:700;margin-bottom:12px;">Common Tire Sizes</h2>
+    <table class="ref-table" id="ref-table">
+      <thead><tr><th>Size</th><th>Diameter (in)</th><th>Common Vehicle</th></tr></thead>
+      <tbody>
+        <tr><td>195/65R15</td><td>25.0</td><td>Compact sedan</td></tr>
+        <tr><td>205/55R16</td><td>24.9</td><td>Midsize sedan</td></tr>
+        <tr><td>225/45R17</td><td>25.0</td><td>Sport sedan</td></tr>
+        <tr><td>235/40R18</td><td>25.4</td><td>Performance</td></tr>
+        <tr><td>265/70R17</td><td>31.6</td><td>Truck/SUV</td></tr>
+        <tr><td>285/75R16</td><td>32.8</td><td>Off-road truck</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ad-rectangle" id="ad-mid">Ad</div>
+  <div class="seo-section">
+    <h2>How to Compare Tire Sizes</h2>
+    <p>Tire size is expressed as width/aspect ratio R rim diameter (e.g., 225/45R17). The width is in millimeters, the aspect ratio is the sidewall height as a percentage of width, and the rim diameter is in inches.</p>
+    <p>When changing tire sizes, keep the overall diameter within 3% of original to avoid speedometer errors, ABS issues, and potential rubbing. This calculator shows exact differences.</p>
+  </div>
+</main>
+<footer>Free tire calculators. No signup, no tracking. Always verify fitment with a tire professional before purchasing.<br>Built by <a href="https://thehivemakes.github.io/" style="color:var(--accent)">The Hive</a></footer>
+<script>
+
+function tireDia(w, a, r) {
+  const sidewallIn = (w * (a/100)) / 25.4;
+  return (2 * sidewallIn) + r;
+}
+function calculate() {
+  const w1=CalcCore.get('w1'), a1=CalcCore.get('a1'), r1=CalcCore.get('r1');
+  const w2=CalcCore.get('w2'), a2=CalcCore.get('a2'), r2=CalcCore.get('r2');
+  if ([w1,a1,r1,w2,a2,r2].some(v => isNaN(v)||v<=0)) return;
+
+  const d1 = tireDia(w1,a1,r1);
+  const d2 = tireDia(w2,a2,r2);
+  const diff = d2 - d1;
+  const pctDiff = (diff / d1) * 100;
+  const speedoError = -pctDiff;
+  const circ1 = d1 * Math.PI;
+  const circ2 = d2 * Math.PI;
+  const revs1 = 63360 / circ1;
+  const revs2 = 63360 / circ2;
+
+  CalcCore.set('ts-dia1', CalcCore.fmt(d1, 2) + '\" (' + w1+'/'+a1+'R'+r1 + ')');
+  CalcCore.set('ts-dia2', CalcCore.fmt(d2, 2) + '\" (' + w2+'/'+a2+'R'+r2 + ')');
+  CalcCore.set('ts-diff', (diff>0?'+':'') + CalcCore.fmt(diff, 2) + '\" (' + (pctDiff>0?'+':'') + CalcCore.fmt(pctDiff, 1) + '%)');
+  CalcCore.set('ts-speedo', 'At 60 mph actual, speedo reads ' + CalcCore.fmt(60*(1+speedoError/100), 1) + ' mph (' + (speedoError>0?'+':'') + CalcCore.fmt(speedoError, 1) + '%)');
+  CalcCore.set('ts-revs', CalcCore.fmtInt(revs1) + ' vs ' + CalcCore.fmtInt(revs2) + ' per mile');
+  CalcCore.showResult();
+  CalcCore.saveParams(['w1','a1','r1','w2','a2','r2']);
+}
+
+function clearAll() {
+  ["w1", "a1", "r1", "w2", "a2", "r2"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = el.defaultValue || '';
+  });
+  document.getElementById('result').classList.remove('visible');
+  history.replaceState(null, '', window.location.pathname);
+}
+
+document.addEventListener('DOMContentLoaded', () => { if (window.location.search) calculate(); });
+</script>
+</body>
+</html>

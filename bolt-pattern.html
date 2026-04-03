@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolt Pattern Reference — TireCalc</title>
+<meta name="description" content="Wheel bolt pattern calculator. Look up PCD and bolt count for common vehicles. Check wheel compatibility. Free tool.">
+<meta property="og:title" content="Bolt Pattern Reference — TireCalc">
+<meta property="og:description" content="Wheel bolt pattern calculator. Look up PCD and bolt count for common vehicles. Check wheel compatibility. Free tool.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://thehivemakes.github.io/hive-tire-calc/bolt-pattern.html">
+<link rel="stylesheet" href="style.css">
+<script src="js/calc-core.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Bolt Pattern Reference",
+  "url": "https://thehivemakes.github.io/hive-tire-calc/bolt-pattern.html",
+  "description": "Wheel bolt pattern calculator. Look up PCD and bolt count for common vehicles. Check wheel compatibility. Free tool.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+</head>
+<body>
+<header><div class="header-inner"><div class="logo">Tire<span>Calc</span></div><div class="tagline">Free tire calculators</div></div></header>
+<nav><div class="nav-inner"><a href="index.html">TireCalc</a><span class="sep">/</span><span>Bolt Pattern Reference</span></div></nav>
+<main>
+  <div class="ad-leaderboard" id="ad-top">Ad</div>
+  <div class="card">
+    <h1>Bolt Pattern Reference</h1>
+    <p class="subtitle">Select a bolt count and PCD to check compatibility.</p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="bolts">Number of bolts</label>
+        <select id="bolts"><option value="4">4 bolt</option><option value="5">5 bolt</option><option value="6">6 bolt</option><option value="8">8 bolt</option></select>
+      </div>
+      <div class="field">
+        <label for="pcd">PCD / bolt circle (mm)</label>
+        <input type="number" id="pcd" step="0.1" placeholder="114.3">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+    <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+    <div class="result" id="result">
+      <div class="result-row">
+        <span class="result-label">Bolt pattern</span>
+        <span class="result-value" id="bp-pattern">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Common vehicles</span>
+        <span class="result-value" id="bp-common">—</span>
+      </div>
+      <div class="result-note">PCD (Pitch Circle Diameter) is the diameter of the circle formed by the bolt holes. Common patterns: 5x114.3 (most Japanese/Korean), 5x112 (most German), 5x120 (BMW), 6x139.7 (trucks).</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:16px;font-weight:700;margin-bottom:12px;">Common Bolt Patterns</h2>
+    <table class="ref-table" id="ref-table">
+      <thead><tr><th>Pattern</th><th>Vehicles</th></tr></thead>
+      <tbody>
+        <tr><td>4x100</td><td>Honda Civic, VW Golf (older), Mazda Miata</td></tr>
+        <tr><td>4x108</td><td>Ford Fiesta/Focus (older), Peugeot, Citroen</td></tr>
+        <tr><td>5x100</td><td>Subaru, VW Golf/Jetta (newer), Toyota 86</td></tr>
+        <tr><td>5x108</td><td>Ford Focus/Fusion (newer), Volvo</td></tr>
+        <tr><td>5x112</td><td>VW/Audi, Mercedes, newer Porsche</td></tr>
+        <tr><td>5x114.3</td><td>Honda Accord, Toyota Camry, Hyundai, Nissan</td></tr>
+        <tr><td>5x120</td><td>BMW, newer Chevrolet, Tesla Model 3</td></tr>
+        <tr><td>5x127</td><td>Jeep Wrangler (newer)</td></tr>
+        <tr><td>6x139.7</td><td>Toyota Tacoma, Chevrolet Silverado, Nissan Titan</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ad-rectangle" id="ad-mid">Ad</div>
+  <div class="seo-section">
+    <h2>Understanding Wheel Bolt Patterns</h2>
+    <p>A bolt pattern is described as number of bolts × PCD in millimeters (e.g., 5x114.3). Both must match for a wheel to fit your vehicle.</p>
+    <p>Never force a wheel with the wrong bolt pattern. Even a 1mm difference in PCD means the wheel is not properly centered and can vibrate or loosen.</p>
+  </div>
+</main>
+<footer>Free tire calculators. No signup, no tracking. Always verify fitment with a tire professional before purchasing.<br>Built by <a href="https://thehivemakes.github.io/" style="color:var(--accent)">The Hive</a></footer>
+<script>
+
+const PATTERNS = {
+  '4x100': 'Honda Civic, Mazda Miata, VW Golf (older), Toyota Yaris',
+  '4x108': 'Ford Fiesta/Focus (older), Peugeot, Citroen, Volvo (older)',
+  '5x100': 'Subaru WRX/BRZ, VW Golf/Jetta (newer), Toyota 86/GR86',
+  '5x108': 'Ford Focus/Fusion (newer), Volvo S60/V60, Land Rover',
+  '5x112': 'VW/Audi (newer), Mercedes-Benz, Porsche (newer)',
+  '5x114.3': 'Honda Accord/CR-V, Toyota Camry/RAV4, Hyundai, Nissan, Mazda',
+  '5x120': 'BMW (most), Chevrolet Camaro, Tesla Model 3, Land Rover',
+  '5x127': 'Jeep Wrangler JK/JL, Dodge Durango',
+  '5x130': 'Porsche 911 (older), Mercedes Sprinter',
+  '6x114.3': 'Nissan Frontier/Pathfinder, Infiniti QX4',
+  '6x120': 'Chevrolet Colorado/Canyon',
+  '6x135': 'Ford F-150 (newer)',
+  '6x139.7': 'Toyota Tacoma/4Runner, Chevy Silverado 1500, Ram 1500 (older), Nissan Titan',
+  '8x165.1': 'Ford Super Duty (older), Dodge Ram 2500/3500 (older)',
+  '8x170': 'Ford Super Duty (1999-2004)',
+  '8x180': 'Chevy Silverado 2500/3500 (newer)',
+};
+function calculate() {
+  const bolts = CalcCore.getSelect('bolts');
+  const pcd = CalcCore.get('pcd');
+  if (isNaN(pcd)||pcd<=0) return;
+  const pattern = bolts + 'x' + CalcCore.fmt(pcd,1);
+  const match = PATTERNS[pattern] || 'No common matches found for this pattern';
+  CalcCore.set('bp-pattern', pattern);
+  CalcCore.set('bp-common', match);
+  CalcCore.showResult();
+  CalcCore.saveParams(['bolts','pcd']);
+}
+
+function clearAll() {
+  ["bolts", "pcd"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = el.defaultValue || '';
+  });
+  document.getElementById('result').classList.remove('visible');
+  history.replaceState(null, '', window.location.pathname);
+}
+
+document.addEventListener('DOMContentLoaded', () => { if (window.location.search) calculate(); });
+</script>
+</body>
+</html>

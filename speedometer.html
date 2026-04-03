@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speedometer Correction — TireCalc</title>
+<meta name="description" content="Speedometer correction calculator. Find actual speed with different tire sizes. Free automotive tool.">
+<meta property="og:title" content="Speedometer Correction — TireCalc">
+<meta property="og:description" content="Speedometer correction calculator. Find actual speed with different tire sizes. Free automotive tool.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://thehivemakes.github.io/hive-tire-calc/speedometer.html">
+<link rel="stylesheet" href="style.css">
+<script src="js/calc-core.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Speedometer Correction",
+  "url": "https://thehivemakes.github.io/hive-tire-calc/speedometer.html",
+  "description": "Speedometer correction calculator. Find actual speed with different tire sizes. Free automotive tool.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+</head>
+<body>
+<header><div class="header-inner"><div class="logo">Tire<span>Calc</span></div><div class="tagline">Free tire calculators</div></div></header>
+<nav><div class="nav-inner"><a href="index.html">TireCalc</a><span class="sep">/</span><span>Speedometer Correction</span></div></nav>
+<main>
+  <div class="ad-leaderboard" id="ad-top">Ad</div>
+  <div class="card">
+    <h1>Speedometer Correction</h1>
+    <p class="subtitle">Enter original and new tire sizes to find speedometer correction at any speed.</p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="sp_w1">Original tire width (mm)</label>
+        <input type="number" id="sp_w1" step="5" placeholder="225">
+      </div>
+      <div class="field">
+        <label for="sp_a1">Original aspect ratio</label>
+        <input type="number" id="sp_a1" step="5" placeholder="45">
+      </div>
+      <div class="field">
+        <label for="sp_r1">Original rim (in)</label>
+        <input type="number" id="sp_r1" step="1" placeholder="17">
+      </div>
+      <div class="field">
+        <label for="sp_w2">New tire width (mm)</label>
+        <input type="number" id="sp_w2" step="5" placeholder="245">
+      </div>
+      <div class="field">
+        <label for="sp_a2">New aspect ratio</label>
+        <input type="number" id="sp_a2" step="5" placeholder="40">
+      </div>
+      <div class="field">
+        <label for="sp_r2">New rim (in)</label>
+        <input type="number" id="sp_r2" step="1" placeholder="18">
+      </div>
+      <div class="field">
+        <label for="indicated">Speedometer reads (mph)</label>
+        <input type="number" id="indicated" step="5" placeholder="60" value="60">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+    <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+    <div class="result" id="result">
+      <div class="result-row">
+        <span class="result-label">Actual speed</span>
+        <span class="result-value" id="sp-actual">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Speedometer error</span>
+        <span class="result-value" id="sp-error">—</span>
+      </div>
+      <div class="result-note">Actual speed = indicated speed × (new diameter / original diameter). Larger tires mean you go faster than the speedometer shows.</div>
+    </div>
+  </div>
+
+  <div class="ad-rectangle" id="ad-mid">Ad</div>
+  <div class="seo-section">
+    <h2>How Tire Size Affects Your Speedometer</h2>
+    <p>Your speedometer is calibrated for your factory tire size. When you change tire sizes, the speedometer becomes inaccurate because the number of wheel revolutions per mile changes.</p>
+    <p>Larger tires travel farther per revolution, so the speedometer reads lower than actual speed. This calculator tells you your true speed at any indicated reading.</p>
+  </div>
+</main>
+<footer>Free tire calculators. No signup, no tracking. Always verify fitment with a tire professional before purchasing.<br>Built by <a href="https://thehivemakes.github.io/" style="color:var(--accent)">The Hive</a></footer>
+<script>
+
+function calculate() {
+  const w1=CalcCore.get('sp_w1'),a1=CalcCore.get('sp_a1'),r1=CalcCore.get('sp_r1');
+  const w2=CalcCore.get('sp_w2'),a2=CalcCore.get('sp_a2'),r2=CalcCore.get('sp_r2');
+  const indicated=CalcCore.get('indicated');
+  if ([w1,a1,r1,w2,a2,r2,indicated].some(v=>isNaN(v)||v<=0)) return;
+  const d1=(2*(w1*(a1/100))/25.4)+r1;
+  const d2=(2*(w2*(a2/100))/25.4)+r2;
+  const actual=indicated*(d2/d1);
+  const error=((actual-indicated)/indicated)*100;
+  CalcCore.set('sp-actual',CalcCore.fmt(actual,1)+' mph actual');
+  CalcCore.set('sp-error',(error>0?'+':'')+CalcCore.fmt(error,1)+'% ('+(error>0?'faster':'slower')+' than displayed)');
+  CalcCore.showResult();
+  CalcCore.saveParams(['sp_w1','sp_a1','sp_r1','sp_w2','sp_a2','sp_r2','indicated']);
+}
+
+function clearAll() {
+  ["sp_w1", "sp_a1", "sp_r1", "sp_w2", "sp_a2", "sp_r2", "indicated"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = el.defaultValue || '';
+  });
+  document.getElementById('result').classList.remove('visible');
+  history.replaceState(null, '', window.location.pathname);
+}
+
+document.addEventListener('DOMContentLoaded', () => { if (window.location.search) calculate(); });
+</script>
+</body>
+</html>

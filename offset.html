@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wheel Offset Calculator — TireCalc</title>
+<meta name="description" content="Wheel offset and backspacing calculator. Check if new wheels will fit your vehicle. ET to backspace conversion. Free tool.">
+<meta property="og:title" content="Wheel Offset Calculator — TireCalc">
+<meta property="og:description" content="Wheel offset and backspacing calculator. Check if new wheels will fit your vehicle. ET to backspace conversion. Free tool.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://thehivemakes.github.io/hive-tire-calc/offset.html">
+<link rel="stylesheet" href="style.css">
+<script src="js/calc-core.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Wheel Offset Calculator",
+  "url": "https://thehivemakes.github.io/hive-tire-calc/offset.html",
+  "description": "Wheel offset and backspacing calculator. Check if new wheels will fit your vehicle. ET to backspace conversion. Free tool.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+</head>
+<body>
+<header><div class="header-inner"><div class="logo">Tire<span>Calc</span></div><div class="tagline">Free tire calculators</div></div></header>
+<nav><div class="nav-inner"><a href="index.html">TireCalc</a><span class="sep">/</span><span>Wheel Offset Calculator</span></div></nav>
+<main>
+  <div class="ad-leaderboard" id="ad-top">Ad</div>
+  <div class="card">
+    <h1>Wheel Offset Calculator</h1>
+    <p class="subtitle">Enter wheel width, offset, and backspacing to check fitment.</p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="wheel_width">Wheel width (inches)</label>
+        <input type="number" id="wheel_width" step="0.5" placeholder="8">
+      </div>
+      <div class="field">
+        <label for="offset_mm">Offset / ET (mm)</label>
+        <input type="number" id="offset_mm" step="1" placeholder="35">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+    <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+    <div class="result" id="result">
+      <div class="result-row">
+        <span class="result-label">Backspacing</span>
+        <span class="result-value" id="of-backspace">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Distance inboard of hub</span>
+        <span class="result-value" id="of-inboard">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Distance outboard of hub</span>
+        <span class="result-value" id="of-outboard">—</span>
+      </div>
+      <div class="result-note">Offset (ET) = distance from hub mounting face to wheel centerline. Positive = hub face outboard of center. Backspacing = hub face to inner lip. Backspacing = (width/2) + (offset/25.4).</div>
+    </div>
+  </div>
+
+  <div class="ad-rectangle" id="ad-mid">Ad</div>
+  <div class="seo-section">
+    <h2>Understanding Wheel Offset</h2>
+    <p>Wheel offset (ET) determines how far in or out the wheel sits relative to the hub. Positive offset tucks the wheel inward; negative offset pushes it outward.</p>
+    <p>When changing wheels, compare the new offset to stock. A difference of more than 10-15mm can affect handling, cause rubbing, or put stress on wheel bearings.</p>
+  </div>
+</main>
+<footer>Free tire calculators. No signup, no tracking. Always verify fitment with a tire professional before purchasing.<br>Built by <a href="https://thehivemakes.github.io/" style="color:var(--accent)">The Hive</a></footer>
+<script>
+
+function calculate() {
+  const w=CalcCore.get('wheel_width');
+  const et=CalcCore.get('offset_mm');
+  if(isNaN(w)||isNaN(et)||w<=0) return;
+  const etIn=et/25.4;
+  const backspace=w/2+etIn;
+  const inboard=backspace;
+  const outboard=w-backspace;
+  CalcCore.set('of-backspace',CalcCore.fmt(backspace,2)+'\"');
+  CalcCore.set('of-inboard',CalcCore.fmt(inboard,2)+'\" inboard of hub face');
+  CalcCore.set('of-outboard',CalcCore.fmt(outboard,2)+'\" outboard of hub face');
+  CalcCore.showResult();
+  CalcCore.saveParams(['wheel_width','offset_mm']);
+}
+
+function clearAll() {
+  ["wheel_width", "offset_mm"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = el.defaultValue || '';
+  });
+  document.getElementById('result').classList.remove('visible');
+  history.replaceState(null, '', window.location.pathname);
+}
+
+document.addEventListener('DOMContentLoaded', () => { if (window.location.search) calculate(); });
+</script>
+</body>
+</html>
