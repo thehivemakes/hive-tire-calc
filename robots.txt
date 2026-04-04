@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://tire.thehivemakes.com/sitemap.xml
+Sitemap: https://thehivemakes.github.io/hive-tire-calc/sitemap.xml

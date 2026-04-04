@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://tire.thehivemakes.com/</loc><priority>1.0</priority></url>
-  <url><loc>https://tire.thehivemakes.com/tire-size.html</loc><priority>0.8</priority></url>
-  <url><loc>https://tire.thehivemakes.com/speedometer.html</loc><priority>0.8</priority></url>
-  <url><loc>https://tire.thehivemakes.com/offset.html</loc><priority>0.8</priority></url>
-  <url><loc>https://tire.thehivemakes.com/bolt-pattern.html</loc><priority>0.8</priority></url>
-  <url><loc>https://tire.thehivemakes.com/load-index.html</loc><priority>0.8</priority></url>
+  <url><loc>https://thehivemakes.github.io/hive-tire-calc/</loc><priority>1.0</priority></url>
+  <url><loc>https://thehivemakes.github.io/hive-tire-calc/tire-size.html</loc><priority>0.8</priority></url>
+  <url><loc>https://thehivemakes.github.io/hive-tire-calc/speedometer.html</loc><priority>0.8</priority></url>
+  <url><loc>https://thehivemakes.github.io/hive-tire-calc/offset.html</loc><priority>0.8</priority></url>
+  <url><loc>https://thehivemakes.github.io/hive-tire-calc/bolt-pattern.html</loc><priority>0.8</priority></url>
+  <url><loc>https://thehivemakes.github.io/hive-tire-calc/load-index.html</loc><priority>0.8</priority></url>
 </urlset>
